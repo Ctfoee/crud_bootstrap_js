@@ -41,6 +41,26 @@ public class UserService implements UserDetailsService {
                 user.getAuthorities());
     }
 
+    @Transactional
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    @Transactional
+    public Collection<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Transactional
+    public void addUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(User user) {
+        userRepository.delete(user);
+    }
+
     @PostConstruct
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");

@@ -13,7 +13,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints =
+        {
+                @UniqueConstraint(columnNames = "username")
+        }
+)
 public class User implements UserDetails {
 
     @Id
