@@ -18,20 +18,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "users",
-        uniqueConstraints =
-        {
-                @UniqueConstraint(columnNames = "username")
-        }
-)
+@Table(name = "users")
 @Component
 public class User implements UserDetails {
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
-
     @Column
     @Size(min = 4, max = 16, message = "Short username")
     @Pattern(regexp = "[A-z0-9]+", message = "Bad username")
@@ -55,8 +46,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(Long user_id, String username, String password, int age, Collection<Role> roles) {
-        this.user_id = user_id;
+    public User(String username, String password, int age, Collection<Role> roles) {
         this.username = username;
         this.password = password;
         this.age = age;
@@ -123,12 +113,4 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-
-    public Long getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
-    }
 }

@@ -47,10 +47,17 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-
+    @Transactional
     public void addUser(User user) {
         userRepository.findByUsername(user.getUsername()).ifPresent((this::flushUser));
         createUser(user);
+    }
+
+    @Transactional
+    public void updateUser(User newUser) {
+        User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
+        oldUser.setAge(newUser.getAge());
+        oldUser.setPassword(passwordEncoder().encode(newUser.getPassword()));
     }
 
     @Transactional
@@ -62,22 +69,22 @@ public class UserService implements UserDetailsService {
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
-        userRepository.save(new User(1L, "MainAdmin", passwordEncoder().encode("112233"), 13, List.of(user, admin)));
-        userRepository.save(new User(2L, "User1", passwordEncoder().encode("123"), 11, List.of(user)));
+        userRepository.save(new User("MainAdmin", passwordEncoder().encode("112233"), 13, List.of(user, admin)));
+        userRepository.save(new User("User1", passwordEncoder().encode("123"), 11, List.of(user)));
     }
 
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    private void flushUser(User user) {
-        user.setRoles(null);
-        userRepository.delete(user);
-    }
-
     private void createUser(User user) {
         user.setPassword(passwordEncoder().encode(user.getPassword()));
         user.setRoles(List.of(roleService.getRole("ROLE_USER")));
         userRepository.save(user);
+    }
+
+    private void flushUser(User user) {
+        user.setRoles(null);
+        userRepository.delete(user);
     }
 }

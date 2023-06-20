@@ -62,7 +62,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "update";
         } else {
-            userService.addUser(user);
+            userService.updateUser(user);
             return "redirect:/admin/users";
         }
     }
