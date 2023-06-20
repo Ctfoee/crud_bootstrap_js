@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void addUser(User user) {
         User user1 = userRepository.findByUsername(user.getUsername()).orElse(user);
-        user1.setPassword(passwordEncoder().encode(user1.getPassword()));
+        user1.setPassword(passwordEncoder().encode(user.getPassword()));
         userRepository.save(user1);
     }
 
