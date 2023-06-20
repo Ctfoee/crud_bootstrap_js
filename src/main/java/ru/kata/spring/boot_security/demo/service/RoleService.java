@@ -22,7 +22,7 @@ public class RoleService {
 
     @PostConstruct
     public void addRoles() {
-        roleRepository.save(new Role(1L, "ROLE_USER"));
-        roleRepository.save(new Role(2L, "ROLE_ADMIN"));
+        roleRepository.save(new Role("ROLE_USER"));
+        roleRepository.save(new Role("ROLE_ADMIN"));
     }
 }

@@ -5,26 +5,17 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "roles",
-        uniqueConstraints =
-        {
-                @UniqueConstraint(columnNames = "role")
-        }
-)
+@Table(name = "roles")
 public class Role implements GrantedAuthority {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long role_id;
-
     @Column
     private String role;
 
     public Role() {
     }
 
-    public Role(Long id, String role) {
-        this.role_id = id;
+    public Role(String role) {
         this.role = role;
     }
 
