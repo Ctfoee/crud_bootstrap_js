@@ -11,6 +11,11 @@
     <h1 th:text="${user.getUsername()}"></h1>
     <h1 th:text="${user.getAge()}"></h1>
 </div>
+<br>
+
+<form th:method="get" th:action="@{/logout}">
+    <input type="submit" value="Logout"/>
+</form>
 
 </body>
 </html>

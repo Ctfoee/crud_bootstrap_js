@@ -1,8 +1,5 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +14,6 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -53,24 +49,30 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void addUser(User user) {
-        userRepository.save(user);
+        User user1 = userRepository.findByUsername(user.getUsername()).orElse(user);
+        user1.setPassword(passwordEncoder().encode(user1.getPassword()));
+        userRepository.save(user1);
     }
 
     @Transactional
     public void deleteUser(User user) {
-        userRepository.deleteById(user.getUser_id());
+        userRepository.findByUsername(user.getUsername()).ifPresent((this::flushUser));
     }
 
     @PostConstruct
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
-        userRepository.save(new User(1L, "User1", passwordEncoder().encode("123"), 11, List.of(user)));
-        userRepository.save(new User(2L, "User2", passwordEncoder().encode("112233"), 13, List.of(user, admin)));
+        userRepository.save(new User(1L, "Admin", passwordEncoder().encode("112233"), 13, List.of(user, admin)));
+        userRepository.save(new User(2L, "User1", passwordEncoder().encode("123"), 11, List.of(user)));
     }
 
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    private void flushUser(User user) {
+        user.setRoles(null);
+        userRepository.deleteById(user.getUser_id());
+    }
 }
