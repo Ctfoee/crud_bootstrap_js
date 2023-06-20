@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void deleteUser(User user) {
-        userRepository.delete(user);
+        userRepository.deleteById(user.getUser_id());
     }
 
     @PostConstruct
