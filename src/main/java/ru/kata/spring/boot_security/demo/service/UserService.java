@@ -47,11 +47,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    @Transactional
+
     public void addUser(User user) {
-        User user1 = userRepository.findByUsername(user.getUsername()).orElse(user);
-        user1.setPassword(passwordEncoder().encode(user.getPassword()));
-        userRepository.save(user1);
+        userRepository.findByUsername(user.getUsername()).ifPresent((this::flushUser));
+        createUser(user);
     }
 
     @Transactional
@@ -63,7 +62,7 @@ public class UserService implements UserDetailsService {
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
-        userRepository.save(new User(1L, "Admin", passwordEncoder().encode("112233"), 13, List.of(user, admin)));
+        userRepository.save(new User(1L, "MainAdmin", passwordEncoder().encode("112233"), 13, List.of(user, admin)));
         userRepository.save(new User(2L, "User1", passwordEncoder().encode("123"), 11, List.of(user)));
     }
 
@@ -73,6 +72,12 @@ public class UserService implements UserDetailsService {
 
     private void flushUser(User user) {
         user.setRoles(null);
-        userRepository.deleteById(user.getUser_id());
+        userRepository.delete(user);
+    }
+
+    private void createUser(User user) {
+        user.setPassword(passwordEncoder().encode(user.getPassword()));
+        user.setRoles(List.of(roleService.getRole("ROLE_USER")));
+        userRepository.save(user);
     }
 }

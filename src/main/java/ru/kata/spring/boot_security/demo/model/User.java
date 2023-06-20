@@ -3,14 +3,16 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,12 +33,17 @@ public class User implements UserDetails {
     private Long user_id;
 
     @Column
+    @Size(min = 4, max = 16, message = "Short username")
+    @Pattern(regexp = "[A-z0-9]+", message = "Bad username")
     private String username;
 
     @Column
+    @Size(min = 4, max = 16, message = "Password length must be between 4 and 16")
     private String password;
 
     @Column
+    @Min(value = 0, message = "Age must be > 0")
+    @Max(value = 255, message = "Too big age")
     private int age;
 
     @ManyToMany(cascade = CascadeType.ALL)
