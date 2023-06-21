@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 
 @Validated
@@ -22,8 +23,9 @@ public class AdminController {
     }
 
     @GetMapping("")
-    public String displayUsers(Model model) {
+    public String displayUsers(Model model, Principal principal) {
         model.addAttribute("allUsers", userService.findAll());
+        model.addAttribute("currentUser", userService.findByUsername(principal.getName()));
         return "users";
     }
 
@@ -57,6 +59,7 @@ public class AdminController {
         return "update";
     }
 
+
     @PatchMapping("/{username}")
     public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -65,6 +68,18 @@ public class AdminController {
             userService.updateUser(user);
             return "redirect:/admin";
         }
+    }
+
+    @PatchMapping("/{username}/makeAdmin")
+    public String makeUserAdmin(@PathVariable("username") String username) {
+        userService.makeUserAdmin(userService.findByUsername(username));
+        return "redirect:/admin";
+    }
+
+    @PatchMapping("/{username}/unmakeAdmin")
+    public String unmakeUserAdmin(@PathVariable("username") String username) {
+        userService.unmakeUserAdmin(userService.findByUsername(username));
+        return "redirect:/admin";
     }
 
     //Delete

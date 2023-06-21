@@ -78,6 +78,14 @@ public class User implements UserDetails {
                 .collect(Collectors.toList());
     }
 
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
+
+    public void deleteRole(Role role) {
+        this.roles.remove(role);
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

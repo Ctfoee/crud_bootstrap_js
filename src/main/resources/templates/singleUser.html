@@ -11,6 +11,17 @@
     <h1 th:text="${user.getAge()}"></h1>
 </div>
 <br>
+<td th:if="${user.getRoles().size() == 1}">
+    <form th:method="patch" th:action="@{/admin/{username}/makeAdmin(username=${user.getUsername()})}">
+        <input type="submit" value="Make user Admin"/>
+    </form>
+</td>
+<td th:if="${user.getRoles().size() == 2 && user.getUsername() != 'MainAdmin'}">
+    <form th:method="patch" th:action="@{/admin/{username}/unmakeAdmin(username=${user.getUsername()})}">
+        <input type="submit" value="Unmake user Admin"/>
+    </form>
+</td>
+<br>
 
 <form th:method="get" th:action="@{/admin}">
     <input type="submit" value="Back"/>

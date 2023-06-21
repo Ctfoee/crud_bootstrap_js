@@ -69,6 +69,18 @@ public class UserService implements UserDetailsService {
         userRepository.findByUsername(user.getUsername()).ifPresent((this::flushUser));
     }
 
+    @Transactional
+    public void makeUserAdmin(User newUser) {
+        User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
+        oldUser.addRole(roleService.getRole("ROLE_ADMIN"));
+    }
+
+    @Transactional
+    public void unmakeUserAdmin(User newUser) {
+        User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
+        oldUser.deleteRole(roleService.getRole("ROLE_ADMIN"));
+    }
+
     @PostConstruct
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");
