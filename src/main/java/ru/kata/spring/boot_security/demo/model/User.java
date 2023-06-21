@@ -18,11 +18,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username")
+        }
+)
 @Component
 public class User implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column
     @Size(min = 4, max = 16, message = "Short username")
     @Pattern(regexp = "[A-z0-9]+", message = "Bad username")
@@ -35,21 +43,27 @@ public class User implements UserDetails {
     @Column
     @Min(value = 0, message = "Age must be > 0")
     @Max(value = 255, message = "Too big age")
-    private int age;
+    private Integer age;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "users_roles",
-    joinColumns = @JoinColumn(name = "username"),
-    inverseJoinColumns = @JoinColumn(name = "role"))
+            joinColumns = @JoinColumn(name = "username"),
+            inverseJoinColumns = @JoinColumn(name = "role"))
     private Collection<Role> roles;
 
     public User() {
     }
 
-    public User(String username, String password, int age, Collection<Role> roles) {
+    public User(String username, String password, Integer age, Collection<Role> roles) {
         this.username = username;
         this.password = password;
         this.age = age;
+        this.roles = roles;
+    }
+
+    public User(String username, String password, Collection<Role> roles) {
+        this.username = username;
+        this.password = password;
         this.roles = roles;
     }
 
@@ -97,11 +111,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -113,4 +127,15 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
 }

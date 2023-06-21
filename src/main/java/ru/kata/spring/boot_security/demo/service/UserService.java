@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,14 +23,17 @@ public class UserService implements UserDetailsService {
 
     private final RoleService roleService;
 
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleService roleService) {
+    @Autowired
+    public UserService(UserRepository userRepository, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
@@ -37,12 +41,12 @@ public class UserService implements UserDetailsService {
                 user.getAuthorities());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Collection<User> findAll() {
         return userRepository.findAll();
     }
@@ -57,7 +61,7 @@ public class UserService implements UserDetailsService {
     public void updateUser(User newUser) {
         User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
         oldUser.setAge(newUser.getAge());
-        oldUser.setPassword(passwordEncoder().encode(newUser.getPassword()));
+        oldUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
     }
 
     @Transactional
@@ -69,16 +73,13 @@ public class UserService implements UserDetailsService {
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
-        userRepository.save(new User("MainAdmin", passwordEncoder().encode("112233"), 13, List.of(user, admin)));
-        userRepository.save(new User("User1", passwordEncoder().encode("123"), 11, List.of(user)));
+        userRepository.save(new User("MainAdmin", passwordEncoder.encode("112233"), 13, List.of(user, admin)));
+        userRepository.save(new User("User1", passwordEncoder.encode("123"), 11, List.of(user)));
     }
 
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     private void createUser(User user) {
-        user.setPassword(passwordEncoder().encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(List.of(roleService.getRole("ROLE_USER")));
         userRepository.save(user);
     }
