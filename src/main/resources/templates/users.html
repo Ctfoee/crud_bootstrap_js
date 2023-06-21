@@ -36,6 +36,11 @@
     <input type="submit" value="Add new user"/>
 </form>
 <br>
+<br>
+
+<form th:method="get" th:action="@{/user}">
+    <input type="submit" value="My profile"/>
+</form>
 
 <form th:method="get" th:action="@{/logout}">
     <input type="submit" value="Logout"/>
