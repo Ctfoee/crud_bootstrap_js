@@ -21,56 +21,56 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public String displayUsers(Model model) {
         model.addAttribute("allUsers", userService.findAll());
         return "users";
     }
 
-    @GetMapping("/users/{username}")
+    @GetMapping("/{username}")
     public String displayUser(@PathVariable("username") String username, Model model) {
         model.addAttribute("user", userService.findByUsername(username));
         return "singleUser";
     }
 
     //Create
-    @GetMapping("/users/addNew")
+    @GetMapping("/addNew")
     public String addNewUser(Model model) {
         model.addAttribute("user", new User());
         return "addNew";
     }
 
-    @PostMapping("/users/addNew")
+    @PostMapping("/addNew")
     public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "addNew";
         } else {
             userService.addUser(user);
-            return "redirect:/admin/users";
+            return "redirect:/admin";
         }
     }
 
     //Update
-    @GetMapping("/users/{username}/update")
+    @GetMapping("/{username}/update")
     public String updateUserForm(@PathVariable("username") String username, Model model) {
         model.addAttribute("user", userService.findByUsername(username));
         return "update";
     }
 
-    @PatchMapping("/users/{username}")
+    @PatchMapping("/{username}")
     public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "update";
         } else {
             userService.updateUser(user);
-            return "redirect:/admin/users";
+            return "redirect:/admin";
         }
     }
 
     //Delete
-    @DeleteMapping("/users/{username}")
+    @DeleteMapping("/{username}")
     public String deleteUser(@PathVariable("username") String username) {
         userService.deleteUser(userService.findByUsername(username));
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 }

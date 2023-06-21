@@ -6,7 +6,7 @@
 </head>
 <body>
 
-  <form th:method="patch" th:action="@{/admin/users/{username}(username=${user.getUsername()})}" th:object="${user}">
+  <form th:method="patch" th:action="@{/admin/{username}(username=${user.getUsername()})}" th:object="${user}">
     <label>Username can not be chanced</label>
 
     <br><br>

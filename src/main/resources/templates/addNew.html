@@ -9,7 +9,7 @@
 <h2>Add user info</h2>
 <br>
 
-    <form th:method="post" th:action="@{/admin/users/addNew}" th:object="${user}">
+    <form th:method="post" th:action="@{/admin/addNew}" th:object="${user}">
         <label for="username">Username</label>
         <input type="text" th:field="*{username}" id="username"/>
         <br><br>

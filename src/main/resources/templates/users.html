@@ -14,16 +14,16 @@
     <div th:each="user : ${allUsers}">
         <tr>
             <td>
-                <a th:href="@{/admin/users/{username}(username=${user.getUsername()})}"
+                <a th:href="@{/admin/{username}(username=${user.getUsername()})}"
                    th:text="|${user.getUsername()} ${user.getAge()}|"/>
             </td>
             <td>
-                <form th:method="get" th:action="@{/admin/users/{username}/update(username=${user.getUsername()})}">
+                <form th:method="get" th:action="@{/admin/{username}/update(username=${user.getUsername()})}">
                     <input type="submit" value="Update user"/>
                 </form>
             </td>
             <td th:if="${user.getUsername() != 'MainAdmin'}">
-                <form th:method="delete" th:action="@{/admin/users/{username}(username=${user.getUsername()})}">
+                <form th:method="delete" th:action="@{/admin/{username}(username=${user.getUsername()})}">
                     <input type="submit" value="Delete user"/>
                 </form>
             </td>
@@ -32,7 +32,7 @@
 </table>
 <br>
 
-<form th:method="get" th:action="@{/admin/users/addNew}">
+<form th:method="get" th:action="@{/admin/addNew}">
     <input type="submit" value="Add new user"/>
 </form>
 <br>
