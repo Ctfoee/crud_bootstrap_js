@@ -30,8 +30,9 @@ public class AdminController {
     }
 
     @GetMapping("/{username}")
-    public String displayUser(@PathVariable("username") String username, Model model) {
+    public String displayUser(@PathVariable("username") String username, Model model, Principal principal) {
         model.addAttribute("user", userService.findByUsername(username));
+        model.addAttribute("currentUser", userService.findByUsername(principal.getName()));
         return "singleUser";
     }
 

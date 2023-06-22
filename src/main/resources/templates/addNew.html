@@ -10,6 +10,7 @@
 <br>
 
     <form th:method="post" th:action="@{/admin/addNew}" th:object="${user}">
+
         <label for="username">Username</label>
         <input type="text" th:field="*{username}" id="username"/>
         <br><br>
@@ -28,6 +29,9 @@
         <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Bad password</div>
         <br><br>
 
+        <label for="isAdmin">Make Admin</label><br><br>
+        <input type="checkbox" th:field="*{isAdmin}" id="isAdmin" value="true">
+        <br>
 
         <input type="submit" value="Add"/>
     </form>

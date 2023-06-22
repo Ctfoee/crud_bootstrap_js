@@ -7,28 +7,61 @@
 
 <body>
 
-<h3>Users</h3>
+<h3>All users list</h3>
 <br>
 
-<table>
-    <div th:each="user : ${allUsers}">
+<table class="table">
+    <caption>
+        Users
+    </caption>
+    <thead>
         <tr>
-            <td>
-                <a th:href="@{/admin/{username}(username=${user.getUsername()})}"
-                   th:text="|${user.getUsername()} ${user.getAge()}|"/>
-            </td>
-            <td>
-                <form th:method="get" th:action="@{/admin/{username}/update(username=${user.getUsername()})}">
-                    <input type="submit" value="Update user"/>
-                </form>
-            </td>
-            <td th:if="${user.getUsername() != 'MainAdmin' && user.getUsername() != currentUser.getUsername()}">
-                <form th:method="delete" th:action="@{/admin/{username}(username=${user.getUsername()})}">
-                    <input type="submit" value="Delete user"/>
-                </form>
-            </td>
+            <th>
+                Id
+            </th>
+            <th>
+                Username
+            </th>
+            <th>
+                Age
+            </th>
+            <th>
+                Admin
+            </th>
+            <th style="color:blue">
+                Update
+            </th>
+            <th style="color:red">
+                Delete
+            </th>
         </tr>
-    </div>
+    </thead>
+    <tbody>
+        <div th:each="user : ${allUsers}">
+            <tr>
+                <td
+                       th:text="|${user.getId()}|"/>
+                <td>
+                    <a th:href="@{/admin/{username}(username=${user.getUsername()})}"
+                    th:text="|${user.getUsername()}|"/>
+                </td>
+                <td
+                    th:text="|${user.getAge()}|"/>
+                <td
+                        th:text="|${user.getIsAdmin()}|"/>
+                <td>
+                    <form th:method="get" th:action="@{/admin/{username}/update(username=${user.getUsername()})}">
+                        <input type="submit" value="Update user"/>
+                    </form>
+                </td>
+                <td th:if="${user.getUsername() != 'MainAdmin' && user.getId() != currentUser.getId()}">
+                    <form th:method="delete" th:action="@{/admin/{username}(username=${user.getUsername()})}">
+                        <input type="submit" value="Delete user"/>
+                    </form>
+                </td>
+            </tr>
+        </div>
+    </tbody>
 </table>
 <br>
 

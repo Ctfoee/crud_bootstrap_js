@@ -3,8 +3,6 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -51,14 +49,20 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role"))
     private Collection<Role> roles;
 
+    @Column
+    private boolean isAdmin;
+
+
     public User() {
+
     }
 
-    public User(String username, String password, Integer age, Collection<Role> roles) {
+    public User(String username, String password, Integer age, Collection<Role> roles, boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.age = age;
         this.roles = roles;
+        this.isAdmin = isAdmin;
     }
 
     public User(String username, String password, Collection<Role> roles) {
@@ -145,5 +149,13 @@ public class User implements UserDetails {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }
