@@ -63,6 +63,8 @@ public class UserService implements UserDetailsService {
         oldUser.setUsername(newUser.getUsername());
         oldUser.setAge(newUser.getAge());
         oldUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        oldUser.setRoles(newUser.getRoles());
+        oldUser.setIsAdmin(newUser.getIsAdmin());
     }
 
     @Transactional
