@@ -8,26 +8,49 @@
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
           crossorigin="anonymous">
 </head>
-<body>
+<body class="bg-light">
 
 <div th:insert="~{header :: navbar}"></div>
-
-<div class="col-sm-2">
-    <div class="nav flex-column nav-pills" aria-orientation="vertical" id="v-pills-tab" role="tablist">
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <a class="nav-link active" href="/admin">Admin</a>
+<div class="row pe-5">
+    <div class="col-sm-2 bg-white vh-100 px-0">
+        <div class="nav flex-column nav-pills ps-2" aria-orientation="vertical" id="v-pills-tab" role="tablist">
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
+                <a class="nav-link" href="/admin">Admin</a>
+            </div>
+            <a class="nav-link active" href="/user">User</a>
         </div>
-        <a class="nav-link" href="/user">User</a>
+    </div>
+    <div class="col-sm" >
+        <h1>User information-page</h1>
+        <div class="tab-content border">
+            <div class="tab-pane fade show active" id="all">
+                <div class="btn text-start container-fluid border px-3 pt-3 pb-2 bg-light">
+                    <h5>About user</h5>
+                </div>
+                <div class="px-4 py-3">
+                    <table class="table table-sm table-striped border-top">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: hidden">
+                                <td th:text="|${user.getId()}|"/>
+                                <td th:text="|${user.getUsername()}|"/>
+                                <td th:text="|${user.getAge()}|"/>
+                                <td th:text="|${user.getRoles().get(0)} |"/>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<br>
-
-<div>
-    <h1 th:text="${user.getUsername()}"></h1>
-    <h1 th:text="${user.getAge()}"></h1>
-    <h1 th:text="${user.getIsAdmin()}"></h1>
-</div>
-<br>
 
 
 

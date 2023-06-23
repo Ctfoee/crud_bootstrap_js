@@ -23,6 +23,7 @@ public class AdminController {
         this.userService = userService;
     }
 
+    //Read
     @GetMapping("")
     public String displayUsers(Model model, Principal principal) {
         model.addAttribute("allUsers", userService.findAll());
@@ -38,45 +39,16 @@ public class AdminController {
 
 
     //Create
-    @GetMapping("/addNew")
-    public String addNewUser(Model model) {
-        model.addAttribute("user", new User());
-        return "addNew";
-    }
-
     @PostMapping("/addNew")
-    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "addNew";
-        } else {
-            userService.addUser(user);
-            return "redirect:/admin";
-        }
+    public String saveUser(@RequestBody User user) {
+        userService.addUser(user);
+        return "redirect:/admin";
     }
 
     //Update
-    @GetMapping("/{username}/update")
-    public String updateUserForm(@PathVariable("username") String username, Model model) {
-        model.addAttribute("user", userService.findByUsername(username));
-        return "update";
-    }
-
-
     @PatchMapping("/{username}")
     public String updateUser(@RequestBody User user) {
         userService.updateUser(user);
-        return "redirect:/admin";
-    }
-
-    @PatchMapping("/{username}/makeAdmin")
-    public String makeUserAdmin(@PathVariable("username") String username) {
-        userService.makeUserAdmin(userService.findByUsername(username));
-        return "redirect:/admin";
-    }
-
-    @PatchMapping("/{username}/unmakeAdmin")
-    public String unmakeUserAdmin(@PathVariable("username") String username) {
-        userService.unmakeUserAdmin(userService.findByUsername(username));
         return "redirect:/admin";
     }
 

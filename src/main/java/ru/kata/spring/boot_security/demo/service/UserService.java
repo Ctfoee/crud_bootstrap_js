@@ -53,8 +53,12 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void addUser(User user) {
-        userRepository.findByUsername(user.getUsername()).ifPresent((this::flushUser));
-        createUser(user);
+        userRepository.findByUsername(user.getUsername()).ifPresentOrElse((r) -> {}, () -> {
+            System.out.println(user);
+            makeUserIfNot(user);
+            System.out.println(user);
+            createUser(user);
+        });
     }
 
     @Transactional
@@ -96,7 +100,6 @@ public class UserService implements UserDetailsService {
 
     private void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(List.of(roleService.getRole("ROLE_USER")));
         userRepository.save(user);
     }
 
