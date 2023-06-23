@@ -64,49 +64,56 @@ public class UserService implements UserDetailsService {
         oldUser.setAge(newUser.getAge());
         oldUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         oldUser.setRoles(newUser.getRoles());
-        oldUser.setIsAdmin(newUser.getIsAdmin());
+        makeUserIfNot(oldUser);
     }
 
     @Transactional
-    public void deleteUser(User user) {
-        userRepository.findByUsername(user.getUsername()).ifPresent((this::flushUser));
+    public void deleteUser(String username) {
+        userRepository.findByUsername(username).ifPresent((this::flushUser));
     }
 
     @Transactional
     public void makeUserAdmin(User newUser) {
         User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
         oldUser.addRole(roleService.getRole("ROLE_ADMIN"));
-        oldUser.setIsAdmin(true);
     }
 
     @Transactional
     public void unmakeUserAdmin(User newUser) {
         User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
         oldUser.deleteRole(roleService.getRole("ROLE_ADMIN"));
-        oldUser.setIsAdmin(false);
     }
 
     @PostConstruct
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
-        userRepository.save(new User("MainAdmin", passwordEncoder.encode("112233"), 13, List.of(user, admin), true));
-        userRepository.save(new User("User1", passwordEncoder.encode("123"), 11, List.of(user), false));
+        userRepository.save(new User("MainAdmin", passwordEncoder.encode("112233"), 13, List.of(user, admin)));
+        userRepository.save(new User("User1", passwordEncoder.encode("123"), 11, List.of(user, admin)));
+        userRepository.save(new User("User2", passwordEncoder.encode("123"), 19, List.of(user)));
     }
 
 
     private void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (user.getIsAdmin()) {
-            user.setRoles(List.of(roleService.getRole("ROLE_USER"), roleService.getRole("ROLE_ADMIN")));
-        } else {
-            user.setRoles(List.of(roleService.getRole("ROLE_USER")));
-        }
+        user.setRoles(List.of(roleService.getRole("ROLE_USER")));
         userRepository.save(user);
     }
 
     private void flushUser(User user) {
         user.setRoles(null);
         userRepository.delete(user);
+    }
+
+    private void makeUserIfNot(User oldUser) {
+        switch (oldUser.getRoles().size()) {
+            case 0:
+                oldUser.addRole(roleService.getRole("ROLE_USER"));
+            case 1:
+                if (!oldUser.getRoles().get(0).toString().equals("USER")) {
+                    oldUser.addRole(roleService.getRole("ROLE_USER"));
+                }
+            default:
+        }
     }
 }

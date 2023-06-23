@@ -5,14 +5,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collection;
 
 
-@Validated
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -25,16 +26,16 @@ public class AdminController {
     @GetMapping("")
     public String displayUsers(Model model, Principal principal) {
         model.addAttribute("allUsers", userService.findAll());
-        model.addAttribute("currentUser", userService.findByUsername(principal.getName()));
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
         return "users";
     }
 
     @GetMapping("/{username}")
-    public String displayUser(@PathVariable("username") String username, Model model, Principal principal) {
-        model.addAttribute("user", userService.findByUsername(username));
-        model.addAttribute("currentUser", userService.findByUsername(principal.getName()));
-        return "singleUser";
+    @ResponseBody
+    public User getUser(@PathVariable("username") String username) {
+        return userService.findByUsername(username);
     }
+
 
     //Create
     @GetMapping("/addNew")
@@ -62,13 +63,9 @@ public class AdminController {
 
 
     @PatchMapping("/{username}")
-    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "update";
-        } else {
-            userService.updateUser(user);
-            return "redirect:/admin";
-        }
+    public String updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return "redirect:/admin";
     }
 
     @PatchMapping("/{username}/makeAdmin")
@@ -86,7 +83,8 @@ public class AdminController {
     //Delete
     @DeleteMapping("/{username}")
     public String deleteUser(@PathVariable("username") String username) {
-        userService.deleteUser(userService.findByUsername(username));
+        System.out.println(username);
+        userService.deleteUser(username);
         return "redirect:/admin";
     }
 }
