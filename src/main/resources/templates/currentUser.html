@@ -37,14 +37,7 @@
                             <th scope="col">Role</th>
                         </tr>
                         </thead>
-                        <tbody>
-                            <tr style="border-bottom: hidden">
-                                <td th:text="|${user.getId()}|"/>
-                                <td th:text="|${user.getUsername()}|"/>
-                                <td th:text="|${user.getAge()}|"/>
-                                <td th:text="|${user.getRoles().get(0)} |"/>
-                            </tr>
-                        </tbody>
+                        <tbody id="currentUser"></tbody>
                     </table>
                 </div>
             </div>

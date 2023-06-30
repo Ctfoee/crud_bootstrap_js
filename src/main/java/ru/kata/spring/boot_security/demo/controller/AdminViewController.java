@@ -4,18 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-
+import ru.kata.spring.boot_security.demo.model.User;
 
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/admin")
+public class AdminViewController {
 
     @GetMapping
-    public ModelAndView singleUser() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("currentUser");
-        return modelAndView;
+    public String adminPage() {
+        return "users";
     }
-
 }

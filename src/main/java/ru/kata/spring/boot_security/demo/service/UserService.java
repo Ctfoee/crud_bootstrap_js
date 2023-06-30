@@ -93,7 +93,7 @@ public class UserService implements UserDetailsService {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
         userRepository.save(new User("MainAdmin", passwordEncoder.encode("112233"), 13, List.of(user, admin)));
-        userRepository.save(new User("User1", passwordEncoder.encode("123"), 11, List.of(user, admin)));
+        userRepository.save(new User("Alena", passwordEncoder.encode("123"), 19, List.of(user, admin)));
         userRepository.save(new User("User2", passwordEncoder.encode("123"), 19, List.of(user)));
     }
 
