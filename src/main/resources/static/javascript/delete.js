@@ -25,7 +25,7 @@ function deleteUser() {
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            getTableUser();
+            getUsersTable();
         });
     });
 }

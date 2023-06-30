@@ -28,7 +28,7 @@ function createNewUser() {
         }).then(() => {
             form.reset();
             $('#userTable').click();
-            getTableUser()
+            getUsersTable()
         });
     });
 }

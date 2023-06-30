@@ -29,7 +29,7 @@ function editUser() {
                 roles: roles
             })
         }).then(() => {
-            getTableUser()
+            getUsersTable()
         });
     });
 }
