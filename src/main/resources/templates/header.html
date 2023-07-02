@@ -17,13 +17,11 @@
 <div th:fragment="navbar">
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
     <div class="container-fluid">
-      <div>
-        <tr>
+      <div class="navbar-brand">
           <b>
-            <span id="currentUsername"></span>
+            <a id="username"></a>
           </b>
-          with roles: <span id="currentUserRoles"> </span>
-        </tr>
+          <a id="userRoles"></a>
       </div>
       <form class="d-flex" th:method="get" th:action="@{/logout}">
         <button class="btn btn-dark text-secondary" type="submit">Logout</button>

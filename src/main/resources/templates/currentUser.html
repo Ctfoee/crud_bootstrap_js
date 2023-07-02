@@ -37,7 +37,14 @@
                             <th scope="col">Role</th>
                         </tr>
                         </thead>
-                        <tbody id="currentUser"></tbody>
+                        <tbody>
+                        <tr style="border-bottom: hidden">
+                            <td th:text="|${currentUser.getId()}|"/>
+                            <td th:text="|${currentUser.getUsername()}|"/>
+                            <td th:text="|${currentUser.getAge()}|"/>
+                            <td th:text="|${currentUser.getRoles().get(0)} |"/>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -48,6 +55,6 @@
 
 
 <div th:insert="~{header :: popa}"></div>
-<script type="module" src="../static/javascript/currentUser.js"></script>
+<script type="module" src="javascript/onLoad.js"></script>
 </body>
 </html>
