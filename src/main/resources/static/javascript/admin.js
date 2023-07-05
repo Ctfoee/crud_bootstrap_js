@@ -10,7 +10,6 @@ $(document).ready(async function () {
             .then(user => {
                 return user
             })
-        console.log(patchedUser)
         let select = $("#editRoles")
         select.empty()
         $("#editId").val(patchedUser.id)
@@ -58,6 +57,7 @@ $(document).ready(async function () {
     })
 
     $("#submitEditBtn").bind("click", async function() {
+        $("#closeEdit").onclick = () => $("#submitEditBtn").remove()
         let patchedUser = {
             id: $("#editId").val(),
             username: $("#editUsername").val(),
@@ -87,9 +87,13 @@ $(document).ready(async function () {
         if ($("#editUsername").val() === await utils.getAuthUsername()) {
             await utils.updateUserInfo()
         }
+        $("#editModal").hide()
     })
 
     $("#submitDeleteBtn").bind("click", async function() {
+        $("#closeDelete").bind("click", async function() {
+            $("#submitDeleteBtn").remove()
+        })
         let deletedUsername = $("#deleteUsername").val()
         if (deletedUsername === await utils.getAuthUsername()) {
             window.location = "/logout"
@@ -98,7 +102,9 @@ $(document).ready(async function () {
             method: "DELETE"
         })
         await updateUsersTable()
+        $("#deleteModal").hide()
     })
+
 
     $("#submitNewBtn").bind("click", async function() {
         let createdUser = {
@@ -142,16 +148,21 @@ async function updateUsersTable() {
     for (let user of users) {
         let tr = $("<tr/>")
         let th = $("<th/>")
+
         th.text(user.id)
         tr.append(th)
+
         let tdUsername = $("<td/>")
         tdUsername.text(user.username)
         tr.append(tdUsername)
+
         let tdAge = $("<td/>")
         tdAge.text(user.age)
         tr.append(tdAge)
+
         body.append(tr)
         let tdRoles = $("<td/>")
+
         let roles = ""
         for (let role of user.roles) {
 
@@ -159,12 +170,14 @@ async function updateUsersTable() {
         }
         tdRoles.text(roles)
         tr.append(tdRoles)
+
         let tdEdit = $("<td/>")
         let editBtn =$("<button id='editBtn' class='btn btn-primary' type='button'>")
         editBtn.text("Edit")
         editBtn.val(user.username)
         tdEdit.append(editBtn)
         tr.append(tdEdit)
+
         let tdDelete = $("<td/>")
         let deleteBtn =$("<button id='deleteBtn' class='btn btn-danger' type='button'>")
         deleteBtn.text("Delete")
