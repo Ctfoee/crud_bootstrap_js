@@ -4,58 +4,6 @@ $(document).ready(async function () {
 
     await updateUsersTable()
 
-    $(".table #editBtn").bind("click", async function() {
-        let patchedUser = await fetch("/users/" + this.value)
-            .then(response => response.json())
-            .then(user => {
-                return user
-            })
-        let select = $("#editRoles")
-        select.empty()
-        $("#editId").val(patchedUser.id)
-        $("#editUsername").val(patchedUser.username)
-        // $("#editPassword").val(patchedUser.password)
-        $("#editAge").val(patchedUser.age)
-        let roles = await fetch("/roles")
-            .then(response => response.json())
-            .then(rolesList => {
-                return rolesList
-            })
-        for (let role of roles) {
-            let option = $("<option/>")
-            option.val(role.id)
-            option.text(role.role)
-            for (let userRole of patchedUser.roles) {
-                if (role.id === userRole.id) {
-                    option.attr("selected", true)
-                    break
-                }
-            }
-            select.append(option)
-        }
-        $("#editModal").modal("show")
-    })
-
-    $(".table #deleteBtn").bind("click", async function() {
-        let deletedUser = await fetch("/users/" + this.value)
-            .then(response => response.json())
-            .then(user => {
-                return user
-            })
-        let select = $("#deleteRoles")
-        select.empty()
-        $("#deleteId").val(deletedUser.id)
-        $("#deleteUsername").val(deletedUser.username)
-        $("#deletePassword").val(deletedUser.password)
-        $("#deleteAge").val(deletedUser.age)
-        for (let role of deletedUser.roles) {
-            let option = $("<option/>")
-            option.text(role.role)
-            select.append(option)
-        }
-        $("#deleteModal").modal("show")
-    })
-
     $("#submitEditBtn").bind("click", async function() {
         let patchedUser = {
             id: $("#editId").val(),
@@ -172,6 +120,7 @@ async function updateUsersTable() {
         let editBtn =$("<button id='editBtn' class='btn btn-primary' type='button'>")
         editBtn.text("Edit")
         editBtn.val(user.username)
+        editBtn.bind("click", editFunc)
         tdEdit.append(editBtn)
         tr.append(tdEdit)
 
@@ -179,7 +128,60 @@ async function updateUsersTable() {
         let deleteBtn =$("<button id='deleteBtn' class='btn btn-danger' type='button'>")
         deleteBtn.text("Delete")
         deleteBtn.val(user.username)
+        deleteBtn.bind("click", deleteFunc)
         tdDelete.append(deleteBtn)
         tr.append(tdDelete)
     }
+}
+
+async function editFunc() {
+    let patchedUser = await fetch("/users/" + this.value)
+        .then(response => response.json())
+        .then(user => {
+            return user
+        })
+    let select = $("#editRoles")
+    select.empty()
+    $("#editId").val(patchedUser.id)
+    $("#editUsername").val(patchedUser.username)
+    // $("#editPassword").val(patchedUser.password)
+    $("#editAge").val(patchedUser.age)
+    let roles = await fetch("/roles")
+        .then(response => response.json())
+        .then(rolesList => {
+            return rolesList
+        })
+    for (let role of roles) {
+        let option = $("<option/>")
+        option.val(role.id)
+        option.text(role.role)
+        for (let userRole of patchedUser.roles) {
+            if (role.id === userRole.id) {
+                option.attr("selected", true)
+                break
+            }
+        }
+        select.append(option)
+    }
+    $("#editModal").modal("show")
+}
+
+async function deleteFunc() {
+    let deletedUser = await fetch("/users/" + this.value)
+        .then(response => response.json())
+        .then(user => {
+            return user
+        })
+    let select = $("#deleteRoles")
+    select.empty()
+    $("#deleteId").val(deletedUser.id)
+    $("#deleteUsername").val(deletedUser.username)
+    $("#deletePassword").val(deletedUser.password)
+    $("#deleteAge").val(deletedUser.age)
+    for (let role of deletedUser.roles) {
+        let option = $("<option/>")
+        option.text(role.role)
+        select.append(option)
+    }
+    $("#deleteModal").modal("show")
 }
