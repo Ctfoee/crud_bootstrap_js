@@ -14,7 +14,7 @@ $(document).ready(async function () {
         select.empty()
         $("#editId").val(patchedUser.id)
         $("#editUsername").val(patchedUser.username)
-        $("#editPassword").val(patchedUser.password)
+        // $("#editPassword").val(patchedUser.password)
         $("#editAge").val(patchedUser.age)
         let roles = await fetch("/roles")
             .then(response => response.json())
@@ -57,7 +57,6 @@ $(document).ready(async function () {
     })
 
     $("#submitEditBtn").bind("click", async function() {
-        $("#closeEdit").onclick = () => $("#submitEditBtn").remove()
         let patchedUser = {
             id: $("#editId").val(),
             username: $("#editUsername").val(),
@@ -87,13 +86,10 @@ $(document).ready(async function () {
         if ($("#editUsername").val() === await utils.getAuthUsername()) {
             await utils.updateUserInfo()
         }
-        $("#editModal").hide()
+        $("#editModal").modal("hide")
     })
 
     $("#submitDeleteBtn").bind("click", async function() {
-        $("#closeDelete").bind("click", async function() {
-            $("#submitDeleteBtn").remove()
-        })
         let deletedUsername = $("#deleteUsername").val()
         if (deletedUsername === await utils.getAuthUsername()) {
             window.location = "/logout"
@@ -102,7 +98,7 @@ $(document).ready(async function () {
             method: "DELETE"
         })
         await updateUsersTable()
-        $("#deleteModal").hide()
+        $("#deleteModal").modal("hide")
     })
 
 
