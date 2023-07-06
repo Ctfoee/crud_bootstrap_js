@@ -35,15 +35,15 @@
                             <th>Id</th>
                             <th scope="col">Username</th>
                             <th scope="col">Age</th>
-                            <th scope="col">Role</th>
+                            <th scope="col">Roles</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr style="border-bottom: hidden">
-                            <td th:text="|${currentUser.getId()}|"/>
-                            <td th:text="|${currentUser.getUsername()}|"/>
-                            <td th:text="|${currentUser.getAge()}|"/>
-                            <td th:text="|${currentUser.getRoles().get(0)} |"/>
+                            <td id="userId"></td>
+                            <td id="username"></td>
+                            <td id="userAge"></td>
+                            <td id="userRoles"></td>
                         </tr>
                         </tbody>
                     </table>

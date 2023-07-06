@@ -130,6 +130,7 @@ $(document).ready(async function () {
             }
         })
         await updateUsersTable()
+        window.location = "/admin"
     })
 })
 
