@@ -76,18 +76,6 @@ public class UserService implements UserDetailsService {
         userRepository.findByUsername(username).ifPresent((this::flushUser));
     }
 
-    @Transactional
-    public void makeUserAdmin(User newUser) {
-        User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
-        oldUser.addRole(roleService.getRole("ROLE_ADMIN"));
-    }
-
-    @Transactional
-    public void unmakeUserAdmin(User newUser) {
-        User oldUser = userRepository.findByUsername(newUser.getUsername()).orElseThrow(RuntimeException::new);
-        oldUser.deleteRole(roleService.getRole("ROLE_ADMIN"));
-    }
-
     @PostConstruct
     public void addRoles() {
         Role user = roleService.getRole("ROLE_USER");
@@ -116,7 +104,10 @@ public class UserService implements UserDetailsService {
                 if (!oldUser.getRoles().get(0).toString().equals("USER")) {
                     oldUser.addRole(roleService.getRole("ROLE_USER"));
                 }
+            case 2:
+                break;
             default:
+                throw new RuntimeException("User with id=" + oldUser.getId() + " has invalid count of roles");
         }
     }
 }
