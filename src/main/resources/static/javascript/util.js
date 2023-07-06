@@ -19,8 +19,8 @@ export async function updateUserInfo() {
         $("#username").text(authUser.username)
         let rolesText = " with roles: "
         for (let role of authUser.roles) {
-            rolesText += `${role.role.substring(5)} `
+            rolesText += `${role.role.substring(5)},  `
         }
-        $("#userRoles").text(rolesText)
+        $("#userRoles").text(rolesText.substring(0, rolesText.length - 3))
     }
 }
