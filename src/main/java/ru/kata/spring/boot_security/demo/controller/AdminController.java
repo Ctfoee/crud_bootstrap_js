@@ -53,7 +53,6 @@ public class AdminController {
     //Delete
     @DeleteMapping("/{username}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("username") String username) {
-        System.out.println(username);
         userService.deleteUser(username);
         return new ResponseEntity<>(HttpStatus.OK);
     }

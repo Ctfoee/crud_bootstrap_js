@@ -54,9 +54,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void addUser(User user) {
         userRepository.findByUsername(user.getUsername()).ifPresentOrElse((r) -> {}, () -> {
-            System.out.println(user);
             makeUserIfNot(user);
-            System.out.println(user);
             createUser(user);
         });
     }
