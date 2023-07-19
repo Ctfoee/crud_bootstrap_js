@@ -75,7 +75,7 @@ public class UserService implements UserDetailsService {
     }
 
     @PostConstruct
-    public void addRoles() {
+    public void initEntities() {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
         userRepository.save(new User("MainAdmin", passwordEncoder.encode("112233"), 13, List.of(user, admin)));
