@@ -55,7 +55,8 @@ public class UserService implements UserDetailsService {
     public void addUser(User user) {
         userRepository.findByUsername(user.getUsername()).ifPresentOrElse((r) -> {}, () -> {
             makeUserIfNot(user);
-            createUser(user);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
         });
     }
 
@@ -75,19 +76,14 @@ public class UserService implements UserDetailsService {
     }
 
     @PostConstruct
-    public void initEntities() {
+    public void initUsers() {
         Role user = roleService.getRole("ROLE_USER");
         Role admin = roleService.getRole("ROLE_ADMIN");
-        userRepository.save(new User("MainAdmin", passwordEncoder.encode("112233"), 13, List.of(user, admin)));
+        userRepository.save(new User("MainAdmin", passwordEncoder.encode("112233"), 19, List.of(user, admin)));
         userRepository.save(new User("Alena", passwordEncoder.encode("123"), 19, List.of(user, admin)));
-        userRepository.save(new User("User2", passwordEncoder.encode("123"), 19, List.of(user)));
+        userRepository.save(new User("User1", passwordEncoder.encode("123"), 8, List.of(user)));
     }
 
-
-    private void createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
 
     private void flushUser(User user) {
         user.setRoles(null);
@@ -95,17 +91,8 @@ public class UserService implements UserDetailsService {
     }
 
     private void makeUserIfNot(User oldUser) {
-        switch (oldUser.getRoles().size()) {
-            case 0:
-                oldUser.addRole(roleService.getRole("ROLE_USER"));
-            case 1:
-                if (!oldUser.getRoles().get(0).toString().equals("USER")) {
-                    oldUser.addRole(roleService.getRole("ROLE_USER"));
-                }
-            case 2:
-                break;
-            default:
-                throw new RuntimeException("User with id=" + oldUser.getId() + " has invalid count of roles");
+        if(!oldUser.getStringRoles().contains(roleService.getRole("ROLE_USER").toString())) {
+            oldUser.addRole(roleService.getRole("ROLE_USER"));
         }
     }
 }

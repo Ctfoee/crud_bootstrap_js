@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -137,6 +138,14 @@ public class User implements UserDetails, Serializable {
     }
 
     public List<Role> getRoles() {
+        return roles;
+    }
+
+    public List<String> getStringRoles() {
+        List<String> roles = new ArrayList<>();
+        for(Role role : this.roles) {
+            roles.add(role.toString());
+        }
         return roles;
     }
 

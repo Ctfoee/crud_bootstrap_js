@@ -24,7 +24,7 @@ public class RoleService {
     }
 
     @PostConstruct
-    public void addRoles() {
+    public void initRoles() {
         roleRepository.save(new Role("ROLE_USER"));
         roleRepository.save(new Role("ROLE_ADMIN"));
     }
