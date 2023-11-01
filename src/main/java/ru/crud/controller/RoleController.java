@@ -1,11 +1,11 @@
-package ru.kata.spring.boot_security.demo.controller;
+package ru.crud.controller;
 
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.crud.model.Role;
+import ru.crud.service.RoleService;
 
 import java.util.Collection;
 
