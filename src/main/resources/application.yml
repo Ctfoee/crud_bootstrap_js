@@ -14,6 +14,6 @@ spring:
         hbm2ddl:
           auto: create-drop
   mvc:
-    hiddenmethod:
+    hidden-method:
       filter:
         enabled: true
